@@ -48,6 +48,7 @@ class CorrelogramView(ManualClusteringView):
 
         # Function clusters => CCGs.
         self.correlograms = correlograms
+        self.ccg = None
 
         # Set the default bin and window size.
         self.set_bin_window(bin_size=self.bin_size,
@@ -113,6 +114,22 @@ class CorrelogramView(ManualClusteringView):
         with self.building():
             self._plot_correlograms(ccg)
             self._plot_labels(cluster_ids)
+
+        b, w = self.bin_size * 1000, self.window_size * 1000
+
+        if len(ccg) == 1:
+            print('Length: ', len(ccg))
+            single_ccg = ccg[0][0]
+
+            print('Single: ', single_ccg)
+            ccg_max = max(single_ccg)
+            ccg_sum = sum(single_ccg)
+            ccg_center = single_ccg[len(single_ccg) // 2 - 2:len(single_ccg) // 2]
+
+            status_str = 'Bin: {:.1f} ms. Window: {:.1f} ms. Max: {}, Refractory: {}, Sum: {}, ' \
+                         'ViolationOfMax: {:.1f}%, ViolationOfSum: {:.1f}%'
+            self.set_status(status_str.format(b, w, ccg_max, ccg_center, ccg_sum,
+                                              max(ccg_center)/ccg_max*100, max(ccg_center)/ccg_sum*100))
 
     def toggle_normalization(self):
         """Change the normalization of the correlograms."""
