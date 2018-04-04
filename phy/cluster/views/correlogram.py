@@ -124,12 +124,12 @@ class CorrelogramView(ManualClusteringView):
             print('Single: ', single_ccg)
             ccg_max = max(single_ccg)
             ccg_sum = sum(single_ccg)
-            ccg_center = single_ccg[len(single_ccg) // 2 - 2:len(single_ccg) // 2]
+            ccg_center = single_ccg[len(single_ccg) // 2 - 1]
 
             status_str = 'Bin: {:.1f} ms. Window: {:.1f} ms. Max: {}, Refractory: {}, Sum: {}, ' \
-                         'ViolationOfMax: {:.1f}%, ViolationOfSum: {:.1f}%'
+                         'Refractory/Max: {:.1f}%, Refractory/Sum: {:.1f}%'
             self.set_status(status_str.format(b, w, ccg_max, ccg_center, ccg_sum,
-                                              max(ccg_center)/ccg_max*100, max(ccg_center)/ccg_sum*100))
+                                              ccg_center/ccg_max*100, ccg_center/ccg_sum*100))
 
     def toggle_normalization(self):
         """Change the normalization of the correlograms."""
